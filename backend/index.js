@@ -9,7 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Importar rutas (comenta o elimina las que no tengas)
 const movieRoutes = require('./routes/movieRoutes');
 const musicRoutes = require('./routes/musicRoutes');
 const foodRoutes = require('./routes/foodRoutes');
