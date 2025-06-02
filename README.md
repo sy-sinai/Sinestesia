@@ -1,2 +1,0 @@
-# Sinestesia
-multisensorial reviews
