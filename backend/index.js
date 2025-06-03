@@ -29,10 +29,9 @@ mongoose.connect(dbURI, {
 .then(() => console.log('✅ MongoDB connected'))
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
-  process.exit(1); // termina la app si falla la conexión
+  process.exit(1); 
 });
 
-// Usar rutas
 app.use('/api/movies', movieRoutes);
 app.use('/api/music', musicRoutes);
 app.use('/api/foods', foodRoutes);
