@@ -1,43 +1,18 @@
 "use client"
-
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Home, Trophy, FileText, LogOut, User } from "lucide-react"
+import { useAuth } from "@/components/auth-provider"
 
 export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
-
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      fetchUser(token)
-    }
-  }, [])
-
-  const fetchUser = async (token: string) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      if (response.ok) {
-        const userData = await response.json()
-        setUser(userData)
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error)
-    }
-  }
+  const { user, logout, isLoading } = useAuth()
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    setUser(null)
+    logout()
     router.push("/auth/login")
   }
 
@@ -76,7 +51,9 @@ export function Navigation() {
           </div>
 
           <div className="flex items-center space-x-4">
-            {user ? (
+            {isLoading ? (
+              <div className="text-sm text-muted-foreground">Cargando...</div>
+            ) : user ? (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <User className="w-4 h-4" />

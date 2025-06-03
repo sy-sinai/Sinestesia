@@ -14,7 +14,6 @@ exports.createReview = async (req, res) => {
 };
 exports.getMyReviews = async (req, res) => {
   try {
-    // Aquí puedes filtrar por usuario si tienes autenticación, por ahora devuelve todas las reseñas
     const reviews = await Review.find().populate('user');
     res.json(reviews);
   } catch (error) {

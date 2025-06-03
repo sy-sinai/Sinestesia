@@ -27,7 +27,7 @@ export default function FoodDetailPage() {
   useEffect(() => {
     const fetchFood = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/food/${params.id}`)
+        const response = await fetch(`http://localhost:3000/api/food/${params.id}`)
         if (response.ok) {
           const foodData = await response.json()
           setFood(foodData)

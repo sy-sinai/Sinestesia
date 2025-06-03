@@ -3,7 +3,6 @@ const router = express.Router();
 const reviewController = require('../controllers/reviewController.js');
 const { check } = require('express-validator');
 
-// Ordena específicas primero
 router.get('/myreviews', reviewController.getMyReviews);
 router.get('/top/:type', reviewController.getTopItems);
 router.get('/:id', reviewController.getReviewById); 

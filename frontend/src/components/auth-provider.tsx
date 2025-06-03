@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useState, useEffect } from "react"
 
 interface User {
@@ -24,17 +23,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      fetchUser(token)
-    } else {
-      setIsLoading(false)
+    // Solo acceder a localStorage después del montaje del componente
+    const initAuth = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (token) {
+          await fetchUser(token)
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error)
+      } finally {
+        setIsLoading(false)
+      }
     }
+
+    initAuth()
   }, [])
 
   const fetchUser = async (token: string) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/user", {
+      const response = await fetch("http://localhost:3000/api/auth/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,18 +52,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(userData)
       } else {
         localStorage.removeItem("token")
+        setUser(null)
       }
     } catch (error) {
       console.error("Error fetching user:", error)
       localStorage.removeItem("token")
-    } finally {
-      setIsLoading(false)
+      setUser(null)
     }
   }
 
-  const login = (token: string) => {
+  const login = async (token: string) => {
     localStorage.setItem("token", token)
-    fetchUser(token)
+    await fetchUser(token)
   }
 
   const logout = () => {

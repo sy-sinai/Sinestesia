@@ -35,17 +35,17 @@ export function ReviewForm({ type, itemId, onClose, onSuccess, existingReview }:
     const fetchRecommendations = async () => {
       try {
         if (type !== "Película") {
-          const moviesRes = await fetch("http://localhost:5000/api/movies")
+          const moviesRes = await fetch("http://localhost:3000/api/movies")
           const moviesData = await moviesRes.json()
           setMovies(moviesData)
         }
         if (type !== "Música") {
-          const musicRes = await fetch("http://localhost:5000/api/music")
+          const musicRes = await fetch("http://localhost:3000/api/music")
           const musicData = await musicRes.json()
           setMusic(musicData)
         }
         if (type !== "Comida") {
-          const foodRes = await fetch("http://localhost:5000/api/food")
+          const foodRes = await fetch("http://localhost:3000/api/food")
           const foodData = await foodRes.json()
           setFood(foodData)
         }
@@ -79,8 +79,8 @@ export function ReviewForm({ type, itemId, onClose, onSuccess, existingReview }:
       }
 
       const url = existingReview
-        ? `http://localhost:5000/api/reviews/${existingReview._id}`
-        : `http://localhost:5000/api/reviews/${type}/${itemId}`
+        ? `http://localhost:3000/api/reviews/${existingReview._id}`
+        : `http://localhost:3000/api/reviews/${type}/${itemId}`
 
       const method = existingReview ? "PUT" : "POST"
 

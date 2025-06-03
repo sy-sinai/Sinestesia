@@ -14,7 +14,7 @@ exports.getAllFood  = async (req, res)  => {
 exports.getFoodById = async (req, res) => {
     try {
         const foodid= await food.findById(req.params.id);
-        if(!foodid) return res.status(404).json({ message: 'Sorry! Sian lose the song :c'});
+        if(!foodid) return res.status(404).json({ message: 'Sorry! we lost the page :c'});
         res.json(foodid);
     } catch (error) {
         res.status(500).json({error: error.message});
@@ -38,7 +38,7 @@ exports.updateFood = async (req, res) => {
             req.body,
             { new: true}
         );
-        if (!updatedFood) return res.status(400).json({ message: 'Sorry! We lose the song :c'});
+        if (!updatedFood) return res.status(400).json({ message: 'Sorry! we lost the page'});
         res.json(updatedFood);
     } catch (error) {
         res.status(400).json({ error: error.message});
@@ -48,7 +48,7 @@ exports.updateFood = async (req, res) => {
 exports.deleteFood = async (req, res) => {
     try {
         const deletedFood = await food.findByIdAndDelete(req.params.id);
-        if(!deletedFood) return res.status(404).json({ message: 'We delete the song, sorry!'});
+        if(!deletedFood) return res.status(404).json({ message: 'Sorry! we lost the page'});
         res.json({ message: 'Song deleted'});
     } catch (error) {
         res.status(500).json({ error: error.message});

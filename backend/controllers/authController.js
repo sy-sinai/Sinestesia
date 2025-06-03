@@ -4,7 +4,6 @@ const User = require('../models/user');
 const { validationResult } = require('express-validator');
 const config = require('config');
 
-// @desc    Register a new user
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

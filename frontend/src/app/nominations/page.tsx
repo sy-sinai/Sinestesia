@@ -23,6 +23,7 @@ export default function NominationsPage() {
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     fetchTopItems()
@@ -30,25 +31,56 @@ export default function NominationsPage() {
 
   const fetchTopItems = async () => {
     setLoading(true)
+    setError("")
     try {
       const params = new URLSearchParams()
       if (startDate) params.append("startDate", startDate)
       if (endDate) params.append("endDate", endDate)
       params.append("limit", "5")
 
+      // Verificar conexión al backend
+      const healthCheck = await fetch("http://localhost:3000/api/reviews/top/Película", {
+        method: "GET",
+      }).catch(() => null)
+
+      if (!healthCheck) {
+        throw new Error("No se puede conectar al servidor backend")
+      }
+
       const [moviesRes, musicRes, foodRes] = await Promise.all([
-        fetch(`http://localhost:5000/api/reviews/top/Película?${params}`),
-        fetch(`http://localhost:5000/api/reviews/top/Música?${params}`),
-        fetch(`http://localhost:5000/api/reviews/top/Comida?${params}`),
+        fetch(`http://localhost:3000/api/reviews/top/Película?${params}`),
+        fetch(`http://localhost:3000/api/reviews/top/Música?${params}`),
+        fetch(`http://localhost:3000/api/reviews/top/Comida?${params}`),
       ])
 
-      const [moviesData, musicData, foodData] = await Promise.all([moviesRes.json(), musicRes.json(), foodRes.json()])
+      // Manejar respuestas, incluso si algunas fallan
+      const [moviesData, musicData, foodData] = await Promise.all([
+        moviesRes.ok ? moviesRes.json().catch(() => []) : [],
+        musicRes.ok ? musicRes.json().catch(() => []) : [],
+        foodRes.ok ? foodRes.json().catch(() => []) : [],
+      ])
 
-      setTopMovies(moviesData)
-      setTopMusic(musicData)
-      setTopFood(foodData)
+      // Asegurar que los datos sean arrays
+      setTopMovies(Array.isArray(moviesData) ? moviesData : [])
+      setTopMusic(Array.isArray(musicData) ? musicData : [])
+      setTopFood(Array.isArray(foodData) ? foodData : [])
     } catch (error) {
       console.error("Error fetching top items:", error)
+      let errorMessage = "Error al cargar las nominaciones."
+
+      if (error instanceof Error) {
+        if (error.message.includes("Failed to fetch") || error.message.includes("No se puede conectar")) {
+          errorMessage =
+            "No se puede conectar al servidor. Verifica que el backend esté ejecutándose en http://localhost:3000"
+        } else {
+          errorMessage = error.message
+        }
+      }
+
+      setError(errorMessage)
+      setTopMovies([])
+      setTopMusic([])
+      setTopFood([])
     } finally {
       setLoading(false)
     }
@@ -78,7 +110,7 @@ export default function NominationsPage() {
           <Trophy className="w-6 h-6 text-yellow-500" />
         </div>
 
-        {items.length === 0 ? (
+        {!Array.isArray(items) || items.length === 0 ? (
           <Card>
             <CardContent className="text-center py-8">
               <p className="text-muted-foreground">No hay datos suficientes para mostrar nominaciones</p>
@@ -86,47 +118,60 @@ export default function NominationsPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {items.map((item, index) => (
-              <Card key={item.itemDetails._id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200">
-                      <span className="text-xl font-bold text-yellow-700">#{index + 1}</span>
-                    </div>
+            {items.map((item, index) => {
+              // Verificar que el item tenga la estructura correcta
+              if (!item.itemDetails || !item.itemDetails._id) {
+                return null
+              }
 
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-xl font-semibold">{item.itemDetails.tittle || item.itemDetails.name}</h3>
-                        <div className="text-right">
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="flex">{renderStars(item.averageRating)}</div>
-                            <span className="font-bold text-lg">{item.averageRating.toFixed(1)}</span>
+              return (
+                <Card key={item.itemDetails._id} className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200">
+                        <span className="text-xl font-bold text-yellow-700">#{index + 1}</span>
+                      </div>
+
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-xl font-semibold">
+                            {item.itemDetails.tittle || item.itemDetails.name || "Sin título"}
+                          </h3>
+                          <div className="text-right">
+                            <div className="flex items-center gap-2 mb-1">
+                              <div className="flex">{renderStars(item.averageRating || 0)}</div>
+                              <span className="font-bold text-lg">{(item.averageRating || 0).toFixed(1)}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {item.reviewCount || 0} reseña{item.reviewCount !== 1 ? "s" : ""}
+                            </p>
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {item.reviewCount} reseña{item.reviewCount !== 1 ? "s" : ""}
-                          </p>
+                        </div>
+
+                        <p className="text-muted-foreground mb-3">
+                          {item.itemDetails.description || "Sin descripción"}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {item.itemDetails.genre && <Badge variant="secondary">{item.itemDetails.genre}</Badge>}
+                          {item.itemDetails.director && (
+                            <Badge variant="outline">Dir: {item.itemDetails.director}</Badge>
+                          )}
+                          {item.itemDetails.artist && <Badge variant="outline">{item.itemDetails.artist}</Badge>}
+                          {item.itemDetails.countryOfOrigin && (
+                            <Badge variant="outline">{item.itemDetails.countryOfOrigin}</Badge>
+                          )}
+                          {item.itemDetails.releaseYear && (
+                            <Badge variant="outline">{item.itemDetails.releaseYear}</Badge>
+                          )}
+                          {item.itemDetails.year && <Badge variant="outline">{item.itemDetails.year}</Badge>}
                         </div>
                       </div>
-
-                      <p className="text-muted-foreground mb-3">{item.itemDetails.description}</p>
-
-                      <div className="flex flex-wrap gap-2">
-                        {item.itemDetails.genre && <Badge variant="secondary">{item.itemDetails.genre}</Badge>}
-                        {item.itemDetails.director && <Badge variant="outline">Dir: {item.itemDetails.director}</Badge>}
-                        {item.itemDetails.artist && <Badge variant="outline">{item.itemDetails.artist}</Badge>}
-                        {item.itemDetails.countryOfOrigin && (
-                          <Badge variant="outline">{item.itemDetails.countryOfOrigin}</Badge>
-                        )}
-                        {item.itemDetails.releaseYear && (
-                          <Badge variant="outline">{item.itemDetails.releaseYear}</Badge>
-                        )}
-                        {item.itemDetails.year && <Badge variant="outline">{item.itemDetails.year}</Badge>}
-                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         )}
       </section>
@@ -179,6 +224,15 @@ export default function NominationsPage() {
           </form>
         </CardContent>
       </Card>
+
+      {error && (
+        <Card className="mb-8">
+          <CardContent className="text-center py-8">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={fetchTopItems}>Reintentar</Button>
+          </CardContent>
+        </Card>
+      )}
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
