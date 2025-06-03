@@ -26,7 +26,7 @@ export default function LoginPage() {
     setError("")
 
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export default function LoginPage() {
           <div className="mt-4 text-center">
             <span className="text-sm text-muted-foreground">
               ¿No tienes cuenta?{" "}
-              <Link href="/auth/register" className="text-primary hover:underline">
+              <Link href="/api/auth/register" className="text-primary hover:underline">
                 Regístrate
               </Link>
             </span>

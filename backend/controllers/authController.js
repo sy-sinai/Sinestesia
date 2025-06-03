@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/user');
+const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const config = require('config');
 
@@ -69,6 +69,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
     }
+    console.log("Login exitoso para usuario:", user.username); 
 
     const payload = {
       user: {

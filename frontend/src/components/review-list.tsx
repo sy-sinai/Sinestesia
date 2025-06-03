@@ -30,7 +30,7 @@ export function ReviewList({ type, itemId }: ReviewListProps) {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/reviews`)
+        const response = await fetch(`http://localhost:3000/api/reviews`)
         if (response.ok) {
           const allReviews = await response.json()
           const filteredReviews = allReviews.filter((review: any) => review.type === type && review.item === itemId)
