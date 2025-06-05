@@ -1,6 +1,6 @@
  Sinestesia (Review Platform)
 
-Review Platform es una aplicación web fullstack que revoluciona la forma en que las personas descubren y comparten experiencias sobre entretenimiento y gastronomía. A diferencia de las plataformas tradicionales que se enfocan en un solo tipo de contenido, nuestra aplicación permite a los usuarios crear reseñas interconectadas que reflejan cómo realmente experimentamos la cultura: combinando películas, música y comida en experiencias memorables.
+Review Platform es una aplicación web que cambia forma en que las personas descubren y comparten experiencias sobre entretenimiento y gastronomía. A diferencia de las plataformas tradicionales que se enfocan en un solo tipo de contenido, Sinestesia permite a los usuarios crear reseñas interconectadas que reflejan cómo realmente experimentamos la cultura: combinando películas, música y comida en experiencias memorables.
 La característica distintiva de la plataforma es el sistema de recomendaciones cruzadas. Cuando un usuario reseña una película, puede simultáneamente recomendar una canción que complementa la experiencia y un plato de comida que considera perfecto para acompañar la película. Esta funcionalidad reconoce que nuestras experiencias culturales raramente ocurren en aislamiento.
  Funcionalidades Principales
 
@@ -29,11 +29,6 @@ Recomendaciones Cruzadas:Crea experiencias completas vinculando contenido relaci
 
 4. Sistema de Nominaciones y Rankings
    Rankings que exponen las mejores peliculas, musica y comidas basado en la calificación puesta en reseñas y el numero de reseñas por película.
-![Next.js](https://img.shields.io/badge/Next.js-14.0-black?style=for-the-badge&logo=next.js)
-![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=for-the-badge&logo=node.js)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge&logo=mongodb)
 
  Descripción
 
