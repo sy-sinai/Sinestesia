@@ -1,5 +1,9 @@
  Sinestesia (Review Platform)
 
+Documento Proyecto Integrador
+https://docs.google.com/document/d/1-j1dwa93o4HGSQ7W5TB3V6PE7lnbd-DfXagW2vrJgq0/edit?usp=sharing
+
+
 Review Platform es una aplicación web que cambia forma en que las personas descubren y comparten experiencias sobre entretenimiento y gastronomía. A diferencia de las plataformas tradicionales que se enfocan en un solo tipo de contenido, Sinestesia permite a los usuarios crear reseñas interconectadas que reflejan cómo realmente experimentamos la cultura: combinando películas, música y comida en experiencias memorables.
 La característica distintiva de la plataforma es el sistema de recomendaciones cruzadas. Cuando un usuario reseña una película, puede simultáneamente recomendar una canción que complementa la experiencia y un plato de comida que considera perfecto para acompañar la película. Esta funcionalidad reconoce que nuestras experiencias culturales raramente ocurren en aislamiento.
  Funcionalidades Principales
