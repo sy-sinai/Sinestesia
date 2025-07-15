@@ -1,6 +1,8 @@
  Sinestesia (Review Platform)
 
 Documento Proyecto Integrador
+https://udlaec-my.sharepoint.com/:w:/g/personal/sammy_porras_udla_edu_ec/Efsgbo4L0vZAlBnIwG3cWxMBCv-bcsJWcDoYn8xSetzr_A?e=WTVdVa
+
 https://docs.google.com/document/d/1-j1dwa93o4HGSQ7W5TB3V6PE7lnbd-DfXagW2vrJgq0/edit?usp=sharing
 
 
